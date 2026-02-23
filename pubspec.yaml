@@ -1,0 +1,16 @@
+name: api_contract_validator
+description: Runtime API response contract validator for Flutter/Dart. Detect API mismatches before they crash your app. Works with Dio and any HTTP client.
+version: 0.2.0
+repository: https://github.com/ahmedshaat/api_contract_validator
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  dio: ^5.9.1
+  meta: ^1.18.1
+
+dev_dependencies:
+  test: ^1.29.0
+  lints: ^6.1.0
+  build_runner: ^2.4.13

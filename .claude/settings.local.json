@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir)",
+      "Bash(move libhttp_contract_tester.dart libapi_contract_validator.dart)",
+      "Bash(ren libhttp_contract_tester.dart api_contract_validator.dart)",
+      "Read(//c/Users/ahmed/vscode-projects/http_contract_tester_generator/**)",
+      "Read(//c/Users/ahmed/vscode-projects/**)",
+      "Bash(dart pub get)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
