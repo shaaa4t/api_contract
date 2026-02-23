@@ -2,7 +2,7 @@ import 'contract.dart';
 import 'contract_field.dart';
 import 'violation.dart';
 
-/// Internal validation engine that checks JSON data against an [HttpContract].
+/// Internal validation engine that checks JSON data against an [ApiContract].
 ///
 /// This class contains all validation logic including type checking,
 /// nested object recursion, list item validation, and strict mode
@@ -12,7 +12,7 @@ class Validator {
 
   /// Validates [json] against [contract] and returns all violations found.
   static List<Violation> validate(
-    HttpContract contract,
+    ApiContract contract,
     Map<String, dynamic> json, {
     String prefix = '',
   }) {
@@ -84,7 +84,7 @@ class Validator {
       // Recurse into nested objects.
       if (field.nestedContract != null && value is Map<String, dynamic>) {
         final nestedViolations = validate(
-          field.nestedContract as HttpContract,
+          field.nestedContract as ApiContract,
           value,
           prefix: path,
         );
@@ -95,7 +95,7 @@ class Validator {
       if (field.type == FieldType.list &&
           field.listItemContract != null &&
           value is List) {
-        final itemContract = field.listItemContract as HttpContract;
+        final itemContract = field.listItemContract as ApiContract;
         for (var i = 0; i < value.length; i++) {
           final item = value[i];
           if (item is Map<String, dynamic>) {

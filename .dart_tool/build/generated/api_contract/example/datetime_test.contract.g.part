@@ -1,0 +1,18 @@
+// **************************************************************************
+// ContractGenerator
+// **************************************************************************
+
+/// Generated contract for [EventModel].
+final eventModelContract = ApiContract(
+  mode: ContractMode.strict,
+  version: '1.0',
+  fields: {
+    'id': ContractField.required(type: FieldType.number),
+    'title': ContractField.required(type: FieldType.string),
+    'createdAt': ContractField.required(type: FieldType.string),
+    'updatedAt': ContractField.required(type: FieldType.string),
+    'scheduledAt': ContractField.optional(type: FieldType.string),
+    'duration': ContractField.required(type: FieldType.number),
+    'websiteUrl': ContractField.optional(type: FieldType.string),
+  },
+);

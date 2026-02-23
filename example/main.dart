@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:dio/dio.dart';
-import 'package:api_contract_validator/api_contract_validator.dart';
+import 'package:api_contract/api_contract.dart';
 
-import 'post_contract.dart'; // brings in generated `postContract`
+import 'post.dart'; // brings in generated `postContract`
 
 void main() async {
   // ══════════════════════════════════════════════════════════════════
@@ -14,9 +13,9 @@ void main() async {
   print('\n${'═' * 70}\n');
 
   // ══════════════════════════════════════════════════════════════════
-  // SECTION 2: Dio Integration with ContractInterceptor
+  // SECTION 2: Repository Pattern Integration
   // ══════════════════════════════════════════════════════════════════
-  await _dioContractInterceptorExample();
+  await _repositoryPatternExample();
 }
 
 // ────────────────────────────────────────────────────────────────────
@@ -28,14 +27,14 @@ Future<void> _manualContractExamples() async {
   print('╚═══════════════════════════════════════════════════════════════╝\n');
 
   // ── Global Configuration ────────────────────────────────────────────
-  HttpContractConfig.setup(
+  ApiContractConfig.setup(
     onViolation: ViolationBehavior.log,
     enableInRelease: false,
     logPrefix: '[Contract]',
   );
 
   // ── Option 1: Manual Contract Definition ────────────────────────────
-  final manualContract = HttpContract(
+  final manualContract = ApiContract(
     mode: ContractMode.strict,
     version: '1.0',
     fields: {
@@ -44,7 +43,7 @@ Future<void> _manualContractExamples() async {
       'age': const ContractField.optional(type: FieldType.number),
       'email': const ContractField.required(type: FieldType.string),
       'address': ContractField.nested(
-        nestedContract: HttpContract(fields: {
+        nestedContract: ApiContract(fields: {
           'city': const ContractField.required(type: FieldType.string),
           'zip': const ContractField.optional(type: FieldType.string),
         }),
@@ -54,7 +53,7 @@ Future<void> _manualContractExamples() async {
   );
 
   // ── Option 2: Auto-generate from JSON Sample ───────────────────────
-  final fromJsonContract = HttpContract.fromJson({
+  final fromJsonContract = ApiContract.fromJson({
     'id': '123',
     'name': 'Ahmed',
     'age': 25,
@@ -64,7 +63,7 @@ Future<void> _manualContractExamples() async {
   });
 
   // ── Option 3: Generate from JSON Schema ────────────────────────────
-  final fromSchemaContract = HttpContract.fromJsonSchema({
+  final fromSchemaContract = ApiContract.fromJsonSchema({
     'type': 'object',
     'required': ['id', 'name', 'email'],
     'properties': {
@@ -116,57 +115,38 @@ Future<void> _manualContractExamples() async {
 }
 
 // ────────────────────────────────────────────────────────────────────
-// Dio Integration with ContractInterceptor
+// Repository Pattern Integration Example
 // ────────────────────────────────────────────────────────────────────
-Future<void> _dioContractInterceptorExample() async {
+Future<void> _repositoryPatternExample() async {
   print('╔═══════════════════════════════════════════════════════════════╗');
-  print('║        DIO INTEGRATION WITH CONTRACT INTERCEPTOR              ║');
+  print('║        REPOSITORY PATTERN INTEGRATION                         ║');
   print('╚═══════════════════════════════════════════════════════════════╝\n');
 
-  // 1) Configure how violations are handled
-  HttpContractConfig.setup(
-    onViolation: ViolationBehavior.throwInCI, // set CI=true to throw in CI
+  // Configure global behavior
+  ApiContractConfig.setup(
+    onViolation: ViolationBehavior.throwInCI, // Throws in CI, logs otherwise
     enableInRelease: false,
     logPrefix: '[Contract]',
   );
 
-  // 2) Build a wrapper contract for the endpoint shape:
-  // dummyjson /posts returns a Map with a `posts` list and pagination fields.
-  final postsListContract = HttpContract(
-    mode: ContractMode.lenient, // allow extra fields not declared below
-    fields: {
-      'posts': ContractField.list(
-        listItemContract: postContract, // validate each item as a Post
-      ),
-      // Optionally enable these if you want strict checking:
-      // 'total': ContractField.required(type: FieldType.number),
-      // 'skip': ContractField.required(type: FieldType.number),
-      // 'limit': ContractField.required(type: FieldType.number),
+  // Create a repository instance
+  final postRepo = PostRepository();
+
+  // Fetch post with automatic validation
+  print('Fetching post with ID 1...\n');
+  final result = await postRepo.getPost(1);
+
+  result.when(
+    success: (post) {
+      print('✓ Success! Post title: ${post['title']}');
+    },
+    failure: (error) {
+      print('✗ Failed: $error');
     },
   );
-
-  // 3) Register path->contract mapping for this run
-  final contracts = <String, HttpContract>{
-    '/posts': postsListContract,
-  };
-
-  // 4) Create Dio and add the ContractInterceptor
-  final dio = Dio();
-  dio.interceptors.add(ContractInterceptor(contracts));
-
-  try {
-    print('Fetching posts from https://dummyjson.com/posts...\n');
-    final response = await dio.get('https://dummyjson.com/posts');
-    // If violations occur, they will be logged (or thrown in CI) automatically.
-    print('Status: ${response.statusCode}');
-  } on DioException catch (e) {
-    print('Dio error: ${e.response?.statusCode} ${e.message}');
-  } catch (e) {
-    print('Unexpected error: $e');
-  }
 }
 
-void _validateAndPrint(HttpContract contract, Map<String, dynamic> json) {
+void _validateAndPrint(ApiContract contract, Map<String, dynamic> json) {
   final result = contract.validate(json);
   result.when(
     valid: () => print('Contract matched!'),
@@ -176,4 +156,106 @@ void _validateAndPrint(HttpContract contract, Map<String, dynamic> json) {
       }
     },
   );
+}
+
+// ════════════════════════════════════════════════════════════════════
+// Example Repository Implementation
+// ════════════════════════════════════════════════════════════════════
+
+/// A simple result wrapper similar to your ApiResult
+class ApiResult<T> {
+  ApiResult.success(this.data) : error = null;
+  ApiResult.failure(this.error) : data = null;
+
+  final T? data;
+  final String? error;
+
+  void when({
+    required void Function(T data) success,
+    required void Function(String error) failure,
+  }) {
+    if (error != null) {
+      failure(error!);
+    } else {
+      success(data as T);
+    }
+  }
+}
+
+/// Example repository showing how to integrate contract validation
+/// This matches your LessonRepo pattern
+class PostRepository {
+  // In a real app, this would be injected
+  final PostApiService _apiService = PostApiService();
+
+  /// Fetches a post and validates the response against the contract
+  Future<ApiResult<Map<String, dynamic>>> getPost(int postId) async {
+    try {
+      // 1. Make the API call
+      final response = await _apiService.fetchPost(postId);
+
+      // 2. Validate the response against the contract
+      final validationResult = postContract.validate(response);
+
+      // 3. Throw if validation fails (in CI mode) or log warnings
+      validationResult.throwIfInvalid();
+
+      // 4. Return success if validation passes
+      return ApiResult.success(response);
+    } catch (error) {
+      // Handle any errors (network, validation, etc.)
+      return ApiResult.failure('Error fetching post: $error');
+    }
+  }
+
+  /// Alternative approach: Manual violation handling
+  Future<ApiResult<Map<String, dynamic>>> getPostWithManualValidation(
+    int postId,
+  ) async {
+    try {
+      final response = await _apiService.fetchPost(postId);
+
+      // Validate and handle violations manually
+      final validationResult = postContract.validate(response);
+
+      validationResult.when(
+        valid: () {
+          print('✓ Response contract validated successfully');
+        },
+        invalid: (violations) {
+          print('⚠ Contract violations detected:');
+          for (final v in violations) {
+            print('  - ${v.fieldPath}: ${v.message}');
+          }
+          // You can decide whether to throw or continue based on severity
+        },
+      );
+
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.failure('Error: $error');
+    }
+  }
+}
+
+/// Mock API service (in real app, this would use Dio/http)
+class PostApiService {
+  Future<Map<String, dynamic>> fetchPost(int id) async {
+    // Simulate API call
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    // Simulate API response
+    return {
+      'id': id,
+      'title': 'Sample Post Title',
+      'body': 'This is the post body content.',
+      'userId': 1,
+      'reactions': {
+        'likes': 42,
+        'dislikes': 3,
+      },
+      'tags': ['flutter', 'dart', 'api'],
+      'views': 1234,
+    };
+  }
 }

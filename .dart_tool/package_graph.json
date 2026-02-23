@@ -1,17 +1,18 @@
 {
   "roots": [
-    "api_contract_validator"
+    "api_contract"
   ],
   "packages": [
     {
-      "name": "api_contract_validator",
+      "name": "api_contract",
       "version": "0.2.0",
       "dependencies": [
-        "dio",
         "meta"
       ],
       "devDependencies": [
         "build_runner",
+        "dio",
+        "http",
         "lints",
         "test"
       ]
@@ -90,9 +91,14 @@
       ]
     },
     {
-      "name": "meta",
-      "version": "1.18.1",
-      "dependencies": []
+      "name": "http",
+      "version": "1.6.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
+      ]
     },
     {
       "name": "dio",
@@ -106,6 +112,11 @@
         "mime",
         "path"
       ]
+    },
+    {
+      "name": "meta",
+      "version": "1.18.1",
+      "dependencies": []
     },
     {
       "name": "yaml",
@@ -510,14 +521,9 @@
       ]
     },
     {
-      "name": "dio_web_adapter",
-      "version": "2.1.1",
-      "dependencies": [
-        "dio",
-        "http_parser",
-        "meta",
-        "web"
-      ]
+      "name": "web",
+      "version": "1.1.1",
+      "dependencies": []
     },
     {
       "name": "http_parser",
@@ -527,6 +533,16 @@
         "source_span",
         "string_scanner",
         "typed_data"
+      ]
+    },
+    {
+      "name": "dio_web_adapter",
+      "version": "2.1.1",
+      "dependencies": [
+        "dio",
+        "http_parser",
+        "meta",
+        "web"
       ]
     },
     {
@@ -542,11 +558,6 @@
       "dependencies": [
         "web"
       ]
-    },
-    {
-      "name": "web",
-      "version": "1.1.1",
-      "dependencies": []
     },
     {
       "name": "file",

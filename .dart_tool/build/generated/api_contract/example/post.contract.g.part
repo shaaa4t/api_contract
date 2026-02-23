@@ -1,0 +1,26 @@
+// **************************************************************************
+// ContractGenerator
+// **************************************************************************
+
+/// Generated contract for [Post].
+final postContract = ApiContract(
+  mode: ContractMode.strict,
+  version: '1.0',
+  fields: {
+    'id': ContractField.required(type: FieldType.number),
+    'title': ContractField.required(type: FieldType.string),
+    'body': ContractField.optional(type: FieldType.string),
+    'tags': ContractField.list(),
+    'reactions': ContractField.nested(nestedContract: reactionsContract),
+    'views': ContractField.required(type: FieldType.number),
+    'userId': ContractField.required(type: FieldType.number),
+  },
+);
+
+/// Generated contract for [Reactions].
+final reactionsContract = ApiContract(
+  fields: {
+    'likes': ContractField.required(type: FieldType.number),
+    'dislikes': ContractField.required(type: FieldType.number),
+  },
+);

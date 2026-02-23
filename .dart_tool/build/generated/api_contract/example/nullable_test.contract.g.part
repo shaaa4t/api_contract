@@ -1,0 +1,37 @@
+// **************************************************************************
+// ContractGenerator
+// **************************************************************************
+
+/// Generated contract for [PostModel].
+final postModelContract = ApiContract(
+  mode: ContractMode.strict,
+  version: '1.0',
+  fields: {
+    'id': ContractField.optional(type: FieldType.string),
+    'notes': ContractField.optional(type: FieldType.number),
+    'owner': ContractField.nested(
+        nestedContract: ownerModelContract, isRequired: false),
+    'type': ContractField.optional(type: FieldType.string),
+    'content': ContractField.optional(type: FieldType.string),
+    'shop': ContractField.nested(
+        nestedContract: shopModelContract, isRequired: false),
+  },
+);
+
+/// Generated contract for [OwnerModel].
+final ownerModelContract = ApiContract(
+  version: '1.0',
+  fields: {
+    'id': ContractField.required(type: FieldType.string),
+    'name': ContractField.required(type: FieldType.string),
+  },
+);
+
+/// Generated contract for [ShopModel].
+final shopModelContract = ApiContract(
+  version: '1.0',
+  fields: {
+    'id': ContractField.required(type: FieldType.string),
+    'name': ContractField.required(type: FieldType.string),
+  },
+);

@@ -1,10 +1,10 @@
-import 'package:api_contract_validator/api_contract_validator.dart';
+import 'package:api_contract/api_contract.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('HttpContract.validate', () {
+  group('ApiContract.validate', () {
     test('passes when all required fields present with correct types', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'id': const ContractField.required(type: FieldType.string),
           'name': const ContractField.required(type: FieldType.string),
@@ -23,7 +23,7 @@ void main() {
     });
 
     test('fails when required field is missing', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'id': const ContractField.required(type: FieldType.string),
           'name': const ContractField.required(type: FieldType.string),
@@ -42,7 +42,7 @@ void main() {
     });
 
     test('fails on type mismatch', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'age': const ContractField.required(type: FieldType.number),
         },
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('passes with missing optional field', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'id': const ContractField.required(type: FieldType.string),
           'nickname': const ContractField.optional(type: FieldType.string),
@@ -68,7 +68,7 @@ void main() {
     });
 
     test('strict mode fails on extra fields', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         mode: ContractMode.strict,
         fields: {
           'id': const ContractField.required(type: FieldType.string),
@@ -88,7 +88,7 @@ void main() {
     });
 
     test('lenient mode passes on extra fields', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         mode: ContractMode.lenient,
         fields: {
           'id': const ContractField.required(type: FieldType.string),
@@ -104,9 +104,9 @@ void main() {
     });
   });
 
-  group('HttpContract.upgrade', () {
+  group('ApiContract.upgrade', () {
     test('adds and removes fields correctly', () {
-      final v1 = HttpContract(
+      final v1 = ApiContract(
         version: '1.0',
         fields: {
           'id': const ContractField.required(type: FieldType.string),
@@ -131,9 +131,9 @@ void main() {
     });
   });
 
-  group('HttpContract.fromJson', () {
+  group('ApiContract.fromJson', () {
     test('generates correct contract from sample JSON', () {
-      final contract = HttpContract.fromJson({
+      final contract = ApiContract.fromJson({
         'id': '123',
         'age': 25,
         'active': true,
@@ -151,9 +151,9 @@ void main() {
     });
   });
 
-  group('HttpContract.fromJsonSchema', () {
+  group('ApiContract.fromJsonSchema', () {
     test('generates correct contract with required array', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'required': ['id', 'name'],
         'properties': {

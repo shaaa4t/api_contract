@@ -1,4 +1,4 @@
-import 'package:api_contract_validator/api_contract_validator.dart';
+import 'package:api_contract/api_contract.dart';
 import 'package:test/test.dart';
 
 void main() {

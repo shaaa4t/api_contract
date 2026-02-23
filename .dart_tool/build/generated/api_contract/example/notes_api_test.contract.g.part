@@ -1,0 +1,16 @@
+// **************************************************************************
+// ContractGenerator
+// **************************************************************************
+
+/// Generated contract for [Note].
+final noteContract = ApiContract(
+  mode: ContractMode.strict,
+  version: '1.0',
+  fields: {
+    'notificationsId': ContractField.optional(type: FieldType.number),
+    'notificationsTitle': ContractField.optional(type: FieldType.string),
+    'notificationsBody': ContractField.optional(type: FieldType.string),
+    'notificationsDate': ContractField.optional(type: FieldType.string),
+    'userId': ContractField.nullable(type: FieldType.string),
+  },
+);

@@ -20,7 +20,7 @@ enum FieldType {
 }
 
 /// Defines the expected shape and constraints of a single field
-/// within an [HttpContract].
+/// within an [ApiContract].
 class ContractField {
   /// The expected data type for this field.
   final FieldType type;

@@ -6,7 +6,20 @@
       "Bash(ren libhttp_contract_tester.dart api_contract_validator.dart)",
       "Read(//c/Users/ahmed/vscode-projects/http_contract_tester_generator/**)",
       "Read(//c/Users/ahmed/vscode-projects/**)",
-      "Bash(dart pub get)"
+      "Bash(dart pub get)",
+      "Bash(git remote add origin https://github.com/shaaa4t/api_contract_validator.git)",
+      "Bash(git branch -M main)",
+      "Bash(git push -u origin main)",
+      "Bash(dart pub publish --dry-run)",
+      "Bash(dart pub publish)",
+      "Bash(ren api_contract_validator api_contract)",
+      "Bash(powershell -Command \"Rename-Item -Path ''api_contract_validator'' -NewName ''api_contract''\")",
+      "Bash(del libsrcdio_contract_interceptor.dart)",
+      "Bash(del libsrcrequest_contract_interceptor.dart)",
+      "Bash(del testdio_contract_interceptor_test.dart)",
+      "Bash(rm lib/src/dio_contract_interceptor.dart lib/src/request_contract_interceptor.dart test/dio_contract_interceptor_test.dart)",
+      "Bash(cat ../api_contract_generator/build.yaml)",
+      "Bash(dart run build_runner build --delete-conflicting-outputs)"
     ],
     "deny": [],
     "ask": []

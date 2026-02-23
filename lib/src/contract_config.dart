@@ -20,21 +20,21 @@ enum ViolationBehavior {
   silent,
 }
 
-/// Global configuration for the HTTP contract tester.
+/// Global configuration for the API contract validator.
 ///
-/// Use [HttpContractConfig.setup] to configure behavior before running
+/// Use [ApiContractConfig.setup] to configure behavior before running
 /// validations.
 ///
 /// ```dart
-/// HttpContractConfig.setup(
+/// ApiContractConfig.setup(
 ///   onViolation: ViolationBehavior.throwInCI,
 ///   enableInRelease: false,
 /// );
 /// ```
-class HttpContractConfig {
+class ApiContractConfig {
   static ViolationBehavior _onViolation = ViolationBehavior.log;
   static bool _enableInRelease = false;
-  static String _logPrefix = '[HttpContract]';
+  static String _logPrefix = '[ApiContract]';
 
   /// How violations should be handled.
   static ViolationBehavior get onViolation => _onViolation;
@@ -49,7 +49,7 @@ class HttpContractConfig {
   ///
   /// - [onViolation]: How to handle violations (default: [ViolationBehavior.log]).
   /// - [enableInRelease]: Whether to run validation in release builds (default: false).
-  /// - [logPrefix]: Prefix for log messages (default: `'[HttpContract]'`).
+  /// - [logPrefix]: Prefix for log messages (default: `'[ApiContract]'`).
   static void setup({
     ViolationBehavior? onViolation,
     bool? enableInRelease,
@@ -64,7 +64,7 @@ class HttpContractConfig {
   static void reset() {
     _onViolation = ViolationBehavior.log;
     _enableInRelease = false;
-    _logPrefix = '[HttpContract]';
+    _logPrefix = '[ApiContract]';
   }
 
   /// Returns `true` if running in a CI environment.

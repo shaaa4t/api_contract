@@ -1,18 +1,18 @@
-import 'package:api_contract_validator/api_contract_validator.dart';
+import 'package:api_contract/api_contract.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Validator - nested objects', () {
     test('nested object validates recursively', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'user': ContractField.nested(
-            nestedContract: HttpContract(
+            nestedContract: ApiContract(
               fields: {
                 'name':
                     const ContractField.required(type: FieldType.string),
                 'address': ContractField.nested(
-                  nestedContract: HttpContract(
+                  nestedContract: ApiContract(
                     fields: {
                       'city': const ContractField.required(
                           type: FieldType.string),
@@ -41,10 +41,10 @@ void main() {
 
   group('Validator - list items', () {
     test('list items validate with itemContract', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'users': ContractField.list(
-            listItemContract: HttpContract(
+            listItemContract: ApiContract(
               fields: {
                 'id':
                     const ContractField.required(type: FieldType.string),
@@ -71,16 +71,16 @@ void main() {
 
   group('Validator - dot notation paths', () {
     test('dot notation path is correct for deep violations', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'data': ContractField.nested(
-            nestedContract: HttpContract(
+            nestedContract: ApiContract(
               fields: {
                 'items': ContractField.list(
-                  listItemContract: HttpContract(
+                  listItemContract: ApiContract(
                     fields: {
                       'details': ContractField.nested(
-                        nestedContract: HttpContract(
+                        nestedContract: ApiContract(
                           fields: {
                             'value': const ContractField.required(
                                 type: FieldType.number),
@@ -116,7 +116,7 @@ void main() {
 
   group('Validator - deprecated fields', () {
     test('deprecated field triggers violation', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'oldField': const ContractField.deprecated(
             type: FieldType.string,
@@ -141,7 +141,7 @@ void main() {
 
   group('Validator - number type handling', () {
     test('int passes as number type', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'value': const ContractField.required(type: FieldType.number),
         },
@@ -152,7 +152,7 @@ void main() {
     });
 
     test('double passes as number type', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'value': const ContractField.required(type: FieldType.number),
         },
@@ -165,7 +165,7 @@ void main() {
 
   group('Validator - nullable fields', () {
     test('nullable field accepts null value', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'middle_name':
               const ContractField.nullable(type: FieldType.string),
@@ -177,7 +177,7 @@ void main() {
     });
 
     test('non-nullable field rejects null value', () {
-      final contract = HttpContract(
+      final contract = ApiContract(
         fields: {
           'name': const ContractField.required(type: FieldType.string),
         },

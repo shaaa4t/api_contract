@@ -1,7 +1,7 @@
 import '../contract.dart';
 import '../contract_field.dart';
 
-/// Generates an [HttpContract] from a sample JSON response [Map].
+/// Generates an [ApiContract] from a sample JSON response [Map].
 ///
 /// All fields are marked as required by default. The developer can
 /// then adjust individual fields to be optional or nullable as needed.
@@ -10,21 +10,21 @@ import '../contract_field.dart';
 /// - `String` -> [FieldType.string], required
 /// - `int` or `double` -> [FieldType.number], required
 /// - `bool` -> [FieldType.boolean], required
-/// - `Map` -> [FieldType.map], recurse to create nested [HttpContract]
+/// - `Map` -> [FieldType.map], recurse to create nested [ApiContract]
 /// - `List` -> [FieldType.list], if items are Maps, recurse for item contract
 /// - `null` -> [FieldType.any], nullable
 class FromJsonGenerator {
   const FromJsonGenerator._();
 
-  /// Generates an [HttpContract] from a sample JSON [Map].
-  static HttpContract generate(Map<String, dynamic> sampleJson) {
+  /// Generates an [ApiContract] from a sample JSON [Map].
+  static ApiContract generate(Map<String, dynamic> sampleJson) {
     final fields = <String, ContractField>{};
 
     for (final entry in sampleJson.entries) {
       fields[entry.key] = _inferField(entry.value);
     }
 
-    return HttpContract(fields: fields);
+    return ApiContract(fields: fields);
   }
 
   static ContractField _inferField(dynamic value) {

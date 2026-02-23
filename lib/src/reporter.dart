@@ -2,7 +2,7 @@ import 'contract_config.dart';
 import 'violation.dart';
 
 /// Reports contract validation results based on the current
-/// [HttpContractConfig] settings.
+/// [ApiContractConfig] settings.
 ///
 /// In debug/development mode, violations are pretty-printed to the console.
 /// In CI mode (when `CI=true` environment variable is set), violations
@@ -12,8 +12,8 @@ class Reporter {
 
   /// Reports the given [result] according to global configuration.
   ///
-  /// This delegates to [HttpContractConfig.handleResult].
+  /// This delegates to [ApiContractConfig.handleResult].
   static void report(ContractValidationResult result) {
-    HttpContractConfig.handleResult(result);
+    ApiContractConfig.handleResult(result);
   }
 }

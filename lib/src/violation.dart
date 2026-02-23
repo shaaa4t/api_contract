@@ -79,7 +79,7 @@ class ContractViolationException implements Exception {
   }
 }
 
-/// The result of validating a JSON response against an [HttpContract].
+/// The result of validating a JSON response against an [ApiContract].
 class ContractValidationResult {
   /// Whether the validation passed with no violations.
   bool get isValid => violations.isEmpty;

@@ -1,10 +1,10 @@
-import 'package:api_contract_validator/api_contract_validator.dart';
+import 'package:api_contract/api_contract.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('HttpContract.fromJsonSchema', () {
+  group('ApiContract.fromJsonSchema', () {
     test('required array marks correct fields as required', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'required': ['id', 'name'],
         'properties': {
@@ -20,7 +20,7 @@ void main() {
     });
 
     test('nullable:true marks field as nullable', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'properties': {
           'middle_name': {'type': 'string', 'nullable': true},
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('maps type keywords to correct FieldTypes', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'properties': {
           'name': {'type': 'string'},
@@ -52,7 +52,7 @@ void main() {
     });
 
     test('nested object schema recurses correctly', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'required': ['address'],
         'properties': {
@@ -68,13 +68,13 @@ void main() {
       });
 
       expect(contract.fields['address']!.type, FieldType.map);
-      final nested = contract.fields['address']!.nestedContract as HttpContract;
+      final nested = contract.fields['address']!.nestedContract as ApiContract;
       expect(nested.fields['city']!.isRequired, isTrue);
       expect(nested.fields['zip']!.isRequired, isFalse);
     });
 
     test('array with items schema creates list with itemContract', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'properties': {
           'users': {
@@ -95,13 +95,13 @@ void main() {
       expect(usersField.type, FieldType.list);
       expect(usersField.listItemContract, isNotNull);
 
-      final itemContract = usersField.listItemContract as HttpContract;
+      final itemContract = usersField.listItemContract as ApiContract;
       expect(itemContract.fields['id']!.isRequired, isTrue);
       expect(itemContract.fields['name']!.isRequired, isFalse);
     });
 
     test(r'$ref resolves from definitions', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'required': ['address'],
         'properties': {
@@ -120,13 +120,13 @@ void main() {
       });
 
       expect(contract.fields['address']!.type, FieldType.map);
-      final nested = contract.fields['address']!.nestedContract as HttpContract;
+      final nested = contract.fields['address']!.nestedContract as ApiContract;
       expect(nested.fields['city']!.isRequired, isTrue);
       expect(nested.fields['zip']!.isRequired, isFalse);
     });
 
     test(r'$ref in array items resolves correctly', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'properties': {
           'users': {
@@ -149,12 +149,12 @@ void main() {
       final usersField = contract.fields['users']!;
       expect(usersField.listItemContract, isNotNull);
 
-      final itemContract = usersField.listItemContract as HttpContract;
+      final itemContract = usersField.listItemContract as ApiContract;
       expect(itemContract.fields['id']!.isRequired, isTrue);
     });
 
     test('empty properties generates empty fields', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
         'properties': <String, dynamic>{},
       });
@@ -163,7 +163,7 @@ void main() {
     });
 
     test('missing properties key generates empty fields', () {
-      final contract = HttpContract.fromJsonSchema({
+      final contract = ApiContract.fromJsonSchema({
         'type': 'object',
       });
 

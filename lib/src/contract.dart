@@ -13,14 +13,14 @@ enum ContractMode {
   lenient,
 }
 
-/// Defines the expected shape of an HTTP JSON response.
+/// Defines the expected shape of an API JSON response.
 ///
-/// An [HttpContract] is a collection of named [ContractField]s that
+/// An [ApiContract] is a collection of named [ContractField]s that
 /// describe what fields are expected, their types, whether they're
 /// required, and any nested structure.
 ///
 /// ```dart
-/// final contract = HttpContract(
+/// final contract = ApiContract(
 ///   fields: {
 ///     'id': ContractField.required(type: FieldType.string),
 ///     'name': ContractField.required(type: FieldType.string),
@@ -29,7 +29,7 @@ enum ContractMode {
 ///
 /// final result = contract.validate(responseJson);
 /// ```
-class HttpContract {
+class ApiContract {
   /// The expected fields in the response.
   final Map<String, ContractField> fields;
 
@@ -41,8 +41,8 @@ class HttpContract {
   /// contract evolution over time.
   final String? version;
 
-  /// Creates an [HttpContract] with the given [fields], [mode], and [version].
-  const HttpContract({
+  /// Creates an [ApiContract] with the given [fields], [mode], and [version].
+  const ApiContract({
     required this.fields,
     this.mode = ContractMode.lenient,
     this.version,
@@ -54,12 +54,12 @@ class HttpContract {
   /// as needed.
   ///
   /// ```dart
-  /// final contract = HttpContract.fromJson({
+  /// final contract = ApiContract.fromJson({
   ///   "id": "123",
   ///   "name": "Ahmed",
   /// });
   /// ```
-  static HttpContract fromJson(Map<String, dynamic> sampleJson) {
+  static ApiContract fromJson(Map<String, dynamic> sampleJson) {
     return FromJsonGenerator.generate(sampleJson);
   }
 
@@ -69,7 +69,7 @@ class HttpContract {
   /// `"items"`, and basic `"$ref"` resolution.
   ///
   /// ```dart
-  /// final contract = HttpContract.fromJsonSchema({
+  /// final contract = ApiContract.fromJsonSchema({
   ///   "type": "object",
   ///   "required": ["id"],
   ///   "properties": {
@@ -77,7 +77,7 @@ class HttpContract {
   ///   },
   /// });
   /// ```
-  static HttpContract fromJsonSchema(Map<String, dynamic> schema) {
+  static ApiContract fromJsonSchema(Map<String, dynamic> schema) {
     return FromSchemaGenerator.generate(schema);
   }
 
@@ -100,7 +100,7 @@ class HttpContract {
   /// - [version]: The new version string.
   /// - [added]: New fields to add to the contract.
   /// - [removed]: Field names to remove from the contract.
-  HttpContract upgrade({
+  ApiContract upgrade({
     required String version,
     Map<String, ContractField>? added,
     List<String>? removed,
@@ -117,7 +117,7 @@ class HttpContract {
       newFields.addAll(added);
     }
 
-    return HttpContract(
+    return ApiContract(
       fields: newFields,
       mode: mode,
       version: version,
@@ -125,12 +125,12 @@ class HttpContract {
   }
 
   /// Creates a copy of this contract with the given properties overridden.
-  HttpContract copyWith({
+  ApiContract copyWith({
     Map<String, ContractField>? fields,
     ContractMode? mode,
     String? version,
   }) {
-    return HttpContract(
+    return ApiContract(
       fields: fields ?? this.fields,
       mode: mode ?? this.mode,
       version: version ?? this.version,
@@ -139,7 +139,7 @@ class HttpContract {
 
   @override
   String toString() {
-    return 'HttpContract(fields: ${fields.length}, '
+    return 'ApiContract(fields: ${fields.length}, '
         'mode: ${mode.name}, version: $version)';
   }
 }

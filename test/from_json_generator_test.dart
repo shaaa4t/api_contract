@@ -1,45 +1,45 @@
-import 'package:api_contract_validator/api_contract_validator.dart';
+import 'package:api_contract/api_contract.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('HttpContract.fromJson', () {
+  group('ApiContract.fromJson', () {
     test('string value creates required string field', () {
-      final contract = HttpContract.fromJson({'name': 'Ahmed'});
+      final contract = ApiContract.fromJson({'name': 'Ahmed'});
 
       expect(contract.fields['name']!.type, FieldType.string);
       expect(contract.fields['name']!.isRequired, isTrue);
     });
 
     test('int value creates required number field', () {
-      final contract = HttpContract.fromJson({'age': 25});
+      final contract = ApiContract.fromJson({'age': 25});
 
       expect(contract.fields['age']!.type, FieldType.number);
       expect(contract.fields['age']!.isRequired, isTrue);
     });
 
     test('double value creates required number field', () {
-      final contract = HttpContract.fromJson({'score': 9.5});
+      final contract = ApiContract.fromJson({'score': 9.5});
 
       expect(contract.fields['score']!.type, FieldType.number);
       expect(contract.fields['score']!.isRequired, isTrue);
     });
 
     test('bool value creates required boolean field', () {
-      final contract = HttpContract.fromJson({'active': true});
+      final contract = ApiContract.fromJson({'active': true});
 
       expect(contract.fields['active']!.type, FieldType.boolean);
       expect(contract.fields['active']!.isRequired, isTrue);
     });
 
     test('null value creates nullable any field', () {
-      final contract = HttpContract.fromJson({'unknown': null});
+      final contract = ApiContract.fromJson({'unknown': null});
 
       expect(contract.fields['unknown']!.type, FieldType.any);
       expect(contract.fields['unknown']!.isNullable, isTrue);
     });
 
     test('nested map creates nested contract', () {
-      final contract = HttpContract.fromJson({
+      final contract = ApiContract.fromJson({
         'address': {'city': 'Riyadh', 'zip': '12345'},
       });
 
@@ -47,13 +47,13 @@ void main() {
       expect(addressField.type, FieldType.map);
       expect(addressField.nestedContract, isNotNull);
 
-      final nested = addressField.nestedContract as HttpContract;
+      final nested = addressField.nestedContract as ApiContract;
       expect(nested.fields['city']!.type, FieldType.string);
       expect(nested.fields['zip']!.type, FieldType.string);
     });
 
     test('list of maps creates list with itemContract', () {
-      final contract = HttpContract.fromJson({
+      final contract = ApiContract.fromJson({
         'users': [
           {'id': '1', 'name': 'Ahmed'},
         ],
@@ -63,13 +63,13 @@ void main() {
       expect(usersField.type, FieldType.list);
       expect(usersField.listItemContract, isNotNull);
 
-      final itemContract = usersField.listItemContract as HttpContract;
+      final itemContract = usersField.listItemContract as ApiContract;
       expect(itemContract.fields['id']!.type, FieldType.string);
       expect(itemContract.fields['name']!.type, FieldType.string);
     });
 
     test('list of strings creates plain list field', () {
-      final contract = HttpContract.fromJson({
+      final contract = ApiContract.fromJson({
         'tags': ['flutter', 'dart'],
       });
 
@@ -79,7 +79,7 @@ void main() {
     });
 
     test('empty list creates plain list field', () {
-      final contract = HttpContract.fromJson({
+      final contract = ApiContract.fromJson({
         'items': <dynamic>[],
       });
 
@@ -89,7 +89,7 @@ void main() {
     });
 
     test('complex nested JSON generates correct contract', () {
-      final contract = HttpContract.fromJson({
+      final contract = ApiContract.fromJson({
         'id': '123',
         'name': 'Ahmed',
         'age': 25,

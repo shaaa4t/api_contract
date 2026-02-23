@@ -1,7 +1,7 @@
 import '../contract.dart';
 import '../contract_field.dart';
 
-/// Generates an [HttpContract] from a JSON Schema / OpenAPI / Swagger schema.
+/// Generates an [ApiContract] from a JSON Schema / OpenAPI / Swagger schema.
 ///
 /// Supports the following JSON Schema keywords:
 /// - `"type"`: `"string"` | `"number"` | `"integer"` | `"boolean"` | `"array"` | `"object"`
@@ -13,15 +13,15 @@ import '../contract_field.dart';
 class FromSchemaGenerator {
   const FromSchemaGenerator._();
 
-  /// Generates an [HttpContract] from a JSON Schema [Map].
+  /// Generates an [ApiContract] from a JSON Schema [Map].
   ///
   /// If the schema contains `"definitions"`, they are used to resolve
   /// `"$ref"` references.
-  static HttpContract generate(Map<String, dynamic> schema) {
+  static ApiContract generate(Map<String, dynamic> schema) {
     return _parseObjectSchema(schema, schema);
   }
 
-  static HttpContract _parseObjectSchema(
+  static ApiContract _parseObjectSchema(
     Map<String, dynamic> schema,
     Map<String, dynamic> rootSchema,
   ) {
@@ -56,7 +56,7 @@ class FromSchemaGenerator {
       );
     }
 
-    return HttpContract(fields: fields);
+    return ApiContract(fields: fields);
   }
 
   static ContractField _parseField(

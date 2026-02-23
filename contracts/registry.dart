@@ -1,4 +1,4 @@
-import 'package:api_contract_validator/src/contract.dart';
+import 'package:api_contract/src/contract.dart';
 
 /// Central registry mapping URL path patterns to contracts.
 ///
@@ -6,9 +6,9 @@ import 'package:api_contract_validator/src/contract.dart';
 /// - Keep request and response registries separate; payload shapes often differ.
 
 /// Request-body contracts: validate `RequestOptions.data` before sending.
-final Map<String, HttpContract> requestContracts = {
+final Map<String, ApiContract> requestContracts = {
   // Example:
-  // '/posts': HttpContract(fields: {
+  // '/posts': ApiContract(fields: {
   //   'title': const ContractField.required(type: FieldType.string),
   //   'body': const ContractField.optional(type: FieldType.string),
   //   'userId': const ContractField.required(type: FieldType.number),
@@ -16,15 +16,15 @@ final Map<String, HttpContract> requestContracts = {
 };
 
 /// Response-body contracts: validate server responses.
-final Map<String, HttpContract> responseContracts = {
+final Map<String, ApiContract> responseContracts = {
   // Example for single and detail endpoints:
-  // '/posts': HttpContract(fields: {
+  // '/posts': ApiContract(fields: {
   //   'id': const ContractField.required(type: FieldType.number),
   //   'title': const ContractField.required(type: FieldType.string),
   //   'body': const ContractField.optional(type: FieldType.string),
   //   'userId': const ContractField.required(type: FieldType.number),
   // }, mode: ContractMode.strict),
-  // '/posts/{id}': HttpContract(fields: {
+  // '/posts/{id}': ApiContract(fields: {
   //   'id': const ContractField.required(type: FieldType.number),
   //   'title': const ContractField.required(type: FieldType.string),
   //   'body': const ContractField.optional(type: FieldType.string),
