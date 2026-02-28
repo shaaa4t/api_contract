@@ -19,7 +19,10 @@
       "Bash(del testdio_contract_interceptor_test.dart)",
       "Bash(rm lib/src/dio_contract_interceptor.dart lib/src/request_contract_interceptor.dart test/dio_contract_interceptor_test.dart)",
       "Bash(cat ../api_contract_generator/build.yaml)",
-      "Bash(dart run build_runner build --delete-conflicting-outputs)"
+      "Bash(dart run build_runner build --delete-conflicting-outputs)",
+      "Bash(git push -u origin main --tags)",
+      "Bash(git tag -d v0.2.0)",
+      "Bash(git tag v0.2.0)"
     ],
     "deny": [],
     "ask": []
