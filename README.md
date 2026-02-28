@@ -31,10 +31,10 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  api_contract: ^0.2.0
+  api_contract: ^0.2.1
 
 dev_dependencies:
-  api_contract_generator: ^0.1.0
+  api_contract_generator: ^0.2.0
   build_runner: ^2.4.13
 ```
 

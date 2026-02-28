@@ -1,6 +1,6 @@
 name: api_contract
 description: Runtime API response contract validator for Flutter/Dart. Detect API mismatches before they crash your app. Works with any HTTP client.
-version: 0.2.0
+version: 0.2.1
 homepage: https://github.com/shaaa4t/api_contract
 repository: https://github.com/shaaa4t/api_contract
 
