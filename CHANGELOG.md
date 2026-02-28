@@ -1,4 +1,4 @@
-## 0.2.0
+## 0.2.1
 
 ### ✨ New Features
 - **Code Generation Support**: Auto-generate contracts from model classes using `@ApiContractSchema` annotation
